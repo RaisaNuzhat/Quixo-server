@@ -25,7 +25,13 @@ const client = new MongoClient(uri, {
 });
 async function run() {
   try {
-    const itemCollection = client.db("quixo").collection("items");
+    const productCollection = client.db("quixo").collection("products");
+    app.get("/products", async (req, res) => {
+        const cursor = productCollection.find();
+        const result = await cursor.toArray();
+        console.log(result);
+        res.send(result);
+      });
     // Connect the client to the server	(optional starting in v4.7)
     //await client.connect();
     // Send a ping to confirm a successful connection
