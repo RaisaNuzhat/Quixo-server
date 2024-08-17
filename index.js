@@ -35,16 +35,23 @@ async function run() {
         const sort = req.query.sort
         const search = req.query.search
         console.log(size,page)
-        let query = {}
+        let query = {
+          Product_Name: { $regex: search, $options: 'i' },
+        }
         if (filter) query.category = filter
-        const result = await productCollection.find(query).skip(page*size).limit(size).toArray();
+        let options = {}
+        if (sort) options = { sort: { deadline: sort === 'asc' ? 1 : -1 } }
+        const result = await productCollection.find(query,options).skip(page*size).limit(size).toArray();
         console.log(result);
         res.send(result);
       });
 // get all products for count
       app.get("/productcount", async (req, res) => {
         const filter = req.query.filter
-        let query = {}
+        const search = req.query.search
+      let query = {
+        Product_Name: { $regex: search, $options: 'i' },
+      }
         if (filter) query.category = filter
         const count = await productCollection.countDocuments(query);
         res.send({count})
