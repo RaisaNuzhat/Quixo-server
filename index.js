@@ -2,6 +2,7 @@ const express = require("express");
 const cors = require("cors");
 require("dotenv").config();
 const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb");
+
 const app = express();
 const port = process.env.PORT || 5000;
 //  middlewares
@@ -34,11 +35,11 @@ async function run() {
         const filter = req.query.filter
         const sort = req.query.sort
         const search = req.query.search
-        console.log(size,page)
+        console.log(size,page,filter)
         let query = {
           Product_Name: { $regex: search, $options: 'i' },
         }
-        if (filter) query.category = filter
+        if (filter) query.Category = filter
         let options = {}
         if (sort) options = { sort: { deadline: sort === 'asc' ? 1 : -1 } }
         const result = await productCollection.find(query,options).skip(page*size).limit(size).toArray();
@@ -52,7 +53,7 @@ async function run() {
       let query = {
         Product_Name: { $regex: search, $options: 'i' },
       }
-        if (filter) query.category = filter
+        if (filter) query.Category = filter
         const count = await productCollection.countDocuments(query);
         res.send({count})
       });
