@@ -8,8 +8,8 @@ const port = process.env.PORT || 5000;
 const corsOptions = {
     origin: [
       "http://localhost:5173",
-      "",
-      "",
+      "quixo-91bef.web.app",
+      "quixo-91bef.firebaseapp.com",
     ],
     credentials: true,
     optionsSuccessStatus: 200,
@@ -31,15 +31,22 @@ async function run() {
     app.get("/all-products", async (req, res) => {
         const size = parseInt(req.query.size)
         const page = parseInt(req.query.page)-1
+        const filter = req.query.filter
+        const sort = req.query.sort
+        const search = req.query.search
         console.log(size,page)
-        const result = await productCollection.find().skip(page*size).limit(size).toArray();
+        let query = {}
+        if (filter) query.category = filter
+        const result = await productCollection.find(query).skip(page*size).limit(size).toArray();
         console.log(result);
         res.send(result);
       });
 // get all products for count
       app.get("/productcount", async (req, res) => {
-        const count = await productCollection.countDocuments();
-
+        const filter = req.query.filter
+        let query = {}
+        if (filter) query.category = filter
+        const count = await productCollection.countDocuments(query);
         res.send({count})
       });
     // Connect the client to the server	(optional starting in v4.7)
