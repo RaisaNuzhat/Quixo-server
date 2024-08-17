@@ -34,6 +34,11 @@ async function run() {
         console.log(result);
         res.send(result);
       });
+// get all products for count
+      app.get("/productcount", async (req, res) => {
+        const count = await productCollection.countDocuments();
+        res.send({count})
+      });
     // Connect the client to the server	(optional starting in v4.7)
     //await client.connect();
     // Send a ping to confirm a successful connection
