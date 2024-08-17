@@ -28,15 +28,18 @@ const client = new MongoClient(uri, {
 async function run() {
   try {
     const productCollection = client.db("quixo").collection("products");
-    app.get("/products", async (req, res) => {
-        const cursor = productCollection.find();
-        const result = await cursor.toArray();
+    app.get("/all-products", async (req, res) => {
+        const size = parseInt(req.query.size)
+        const page = parseInt(req.query.page)-1
+        console.log(size,page)
+        const result = await productCollection.find().skip(page*size).limit(size).toArray();
         console.log(result);
         res.send(result);
       });
 // get all products for count
       app.get("/productcount", async (req, res) => {
         const count = await productCollection.countDocuments();
+
         res.send({count})
       });
     // Connect the client to the server	(optional starting in v4.7)
