@@ -41,7 +41,7 @@ async function run() {
         }
         if (filter) query.Category = filter
         let options = {}
-        if (sort) options = { sort: { deadline: sort === 'asc' ? 1 : -1 } }
+        if (sort) options = { sort: {  Price : sort === 'asc' ? 1 : -1 } }
         const result = await productCollection.find(query,options).skip(page*size).limit(size).toArray();
         console.log(result);
         res.send(result);
