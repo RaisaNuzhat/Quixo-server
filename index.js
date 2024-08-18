@@ -9,8 +9,8 @@ const port = process.env.PORT || 5000;
 const corsOptions = {
     origin: [
       "http://localhost:5173",
-      "quixo-91bef.web.app",
-      "quixo-91bef.firebaseapp.com",
+      "https://quixo-91bef.web.app",
+      "https://quixo-91bef.firebaseapp.com",
     ],
     credentials: true,
     optionsSuccessStatus: 200,
@@ -37,7 +37,7 @@ async function run() {
         const search = req.query.search
         console.log(size,page,filter)
         let query = {
-          Product_Name: { $regex: search, $options: 'i' },
+          // Product_Name: { $regex: search, $options: 'i' },
         }
         if (filter) query.Category = filter
         let options = {}
@@ -51,7 +51,7 @@ async function run() {
         const filter = req.query.filter
         const search = req.query.search
       let query = {
-        Product_Name: { $regex: search, $options: 'i' },
+        // Product_Name: { $regex: search, $options: 'i' },
       }
         if (filter) query.Category = filter
         const count = await productCollection.countDocuments(query);
